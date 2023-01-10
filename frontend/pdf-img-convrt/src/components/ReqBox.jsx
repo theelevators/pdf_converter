@@ -1,0 +1,65 @@
+import React from "react";
+import { Box, Typography, useTheme, Button } from "@mui/material";
+import { tokens } from "./../theme";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+
+const RequirementBox = ({ title, subtitle }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <Box
+      m="1rem"
+      p=".8rem"
+      borderRadius="5px"
+      sx={{
+        backgroundColor: colors.grey[500],
+      }}
+    >
+      <Box display="flex" justifyContent="space-between">
+        <Box>
+          {/* {icon} */}
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            sx={{
+              color: colors.grey[100],
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
+      </Box>
+      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            gridRow: "1",
+            gridColumn: "span 6",
+            color: colors.greenAccent[500],
+          }}
+        >
+          {subtitle}
+        </Typography>
+
+        <Button
+          variant="contained"
+          component="label"
+          sx={{
+            gridRow: "1",
+            gridColumn: "7",
+            width: "140%",
+            minHeight: "2rem",
+            maxHeight: "2rem",
+            color: colors.greenAccent[500],
+          }}
+          endIcon={<PhotoCamera />}
+        >
+          Upload
+          <input hidden accept="image/*" multiple type="file" />
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
+export default RequirementBox;
