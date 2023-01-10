@@ -87,7 +87,8 @@ ipython_config.py
 # pyenv
 /Lib
 /Scripts
-
+#assets
+/assets
 
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
