@@ -1,11 +1,12 @@
-import React from "react";
+import { React, useState } from "react";
 import { Box, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "./../theme";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
-const RequirementBox = ({ title, subtitle }) => {
+const RequirementBox = ({ title, subtitle, getFiles }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <Box
       m="1rem"
@@ -55,7 +56,14 @@ const RequirementBox = ({ title, subtitle }) => {
           endIcon={<PhotoCamera />}
         >
           Upload
-          <input hidden accept="image/*" multiple type="file" />
+          <input
+            className="file-input"
+            hidden
+            accept="image/*"
+            multiple
+            type="file"
+            onChange={(e) => getFiles(e.target.files)}
+          />
         </Button>
       </Box>
     </Box>

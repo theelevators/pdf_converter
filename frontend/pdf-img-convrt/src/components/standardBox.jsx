@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Typography, useTheme, Button, TextField } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+
 import { tokens } from "./../theme";
 
-const CommentBox = ({ title, subtitle }) => {
+const StandardBox = ({ title, subtitle, getComment }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -19,7 +19,7 @@ const CommentBox = ({ title, subtitle }) => {
         sx={{
           display: "grid",
           gridTemplateColumns: "repeat(6, 1fr)",
-          gridTemplateRows: "repeat(3, 3/4fr)",
+          gridTemplateRows: "repeat(2, 3/4fr)",
         }}
       >
         <Box
@@ -42,7 +42,8 @@ const CommentBox = ({ title, subtitle }) => {
 
         <TextField
           id="standard-textarea"
-          placeholder="Enter Comments"
+          placeholder={subtitle}
+          onBlur={(e) => getComment(e)}
           multiline
           variant="standard"
           sx={{
@@ -52,26 +53,10 @@ const CommentBox = ({ title, subtitle }) => {
             marginBottom: ".5rem",
             height: "1/2fr",
           }}
-        >
-          {subtitle}
-        </TextField>
-        <Button
-          variant="contained"
-          component="label"
-          sx={{
-            gridColumn: "5",
-            gridRow: "3",
-            width: "180%",
-            color: colors.greenAccent[500],
-            height: "1.5rem",
-          }}
-          endIcon={<SendIcon />}
-        >
-          Submit
-        </Button>
+        ></TextField>
       </Box>
     </Box>
   );
 };
 
-export default CommentBox;
+export default StandardBox;
