@@ -3,7 +3,6 @@ import shutil
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File
 from typing import List
 
@@ -20,11 +19,9 @@ dbs = client.list_database_names()
 
 
 def insert_submission_form(document):
-    print(document)
-    collection = client.fwt_submissions.submissions
-    inserted_id = collection.insert_one(document).inserted_id
 
-    print(inserted_id)
+    collection = client.fwt_project.submissions
+    inserted_id = collection.insert_one(document).inserted_id
 
 
 app = FastAPI()
@@ -71,22 +68,24 @@ async def upload(address: str, name: str, agent_name: str,
             with open(file.filename, 'wb') as f:
                 shutil.copyfileobj(file.file, f)
             file_path = os.path.join(main_path, file.filename)
-            shutil.move(file_path, path)
-        except Exception:
+
+            shutil.move(file_path, os.path.join(path, file.filename))
+
+        except Exception as err:
             return {"message": "There was an error uploading the file(s)"}
         finally:
             file.file.close()
 
-            form = {
-                "address": address,
-                "name": name,
-                "email": email,
-                "agent": agent_name,
-                "agent_comments": agent_comments,
-                "additional_comments": additional_comments,
-                "files_location": path
+    form = {
+        "address": address,
+        "name": name,
+        "email": email,
+        "agent": agent_name,
+        "agent_comments": agent_comments,
+        "additional_comments": additional_comments,
+        "files_location": path
 
-            }
+    }
     insert_submission_form(form)
 
     return {"message": f"Successfuly uploaded {name} {agent_name}  {agent_comments}   {additional_comments} "}

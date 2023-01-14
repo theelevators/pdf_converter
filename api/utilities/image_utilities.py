@@ -1,21 +1,28 @@
 import os
 from PIL import Image
-# basic layout to conver images to pdf
 
 
-img_path = os.path.dirname(
-    'D:\\download here\\Projects\\pdf_converter\\assets\\submission_assets\\')
+def create_pdf_file(address: str, location: str, id: str):
 
-pdf_path = os.path.dirname(
-    "D:\\download here\\Projects\\pdf_converter\\assets\\converted_pdfs\\")
+    img_path = os.path.dirname(location)
+    pdf_name = f"{address}.pdf"
+    pdf_dir = os.path.join(img_path, "pdf_file\\")
 
-images = [
-    Image.open(os.path.join(img_path, f))
-    for f in ["stock_image_1.jpg", "stock_image_2.jpg", "stock_image_3.jpg"]
-]
+    if os.path.exists(pdf_dir) == False:
+        os.makedirs(pdf_dir)
 
-pdf_path = os.path.join(pdf_path, "new_pdf.pdf")
+    pdf_path = os.path.dirname(pdf_dir)
+    size = 600, 600
+    images = []
+    for f in os.listdir(img_path):
 
-images[0].save(
-    pdf_path, "PDF", resolution=100.0, save_all=True, append_images=images[1:]
-)
+        if '.jpg' in f:
+            img = Image.open(os.path.join(img_path, f))
+            img.thumbnail(size, Image.Resampling.LANCZOS)
+            images.append(img)
+
+    final_path = os.path.join(pdf_path, pdf_name)
+
+    images[0].save(
+        final_path, "PDF", resolution=100.0, save_all=True, append_images=images[1:]
+    )
