@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 from image_utilities import create_pdf_file
 
 load_dotenv(find_dotenv())
-client = pymongo.MongoClient(os.environ['CHANGE_STREAM_DB'])
+client = pymongo.MongoClient(os.environ['DB_CONNECTION'])
 
 change_stream = client.fwt_project.submissions.watch([{
     '$match': {
