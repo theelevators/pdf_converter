@@ -3,6 +3,7 @@ import os
 import pprint
 from pymongo import MongoClient
 
+
 load_dotenv(find_dotenv())
 
 password = os.environ.get("MONGODB_PWD")
@@ -14,17 +15,21 @@ client = MongoClient(connection_string)
 dbs = client.list_database_names()
 
 
-def insert_test_doc():
+def insert_submission_form(document):
     collection = client.fwt_submissions.submissions
-    test_document = {
-        "Hello": "World!",
-        "My Name Is": 1,
-        "jk it is": 'tom'
-    }
-
-    inserted_id = collection.insert_one(test_document).inserted_id
+    inserted_id = collection.insert_one(document).inserted_id
 
     print(inserted_id)
 
 
-insert_test_doc()
+form = {
+    "address": "address",
+    "name": "address",
+    "email": "address",
+    "agent": "address",
+    "agent_comments": "address",
+    "additional_comments": "address",
+    "files_location": "address"
+
+}
+insert_submission_form(form)
