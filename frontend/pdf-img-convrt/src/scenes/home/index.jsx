@@ -4,8 +4,15 @@ import CommentBox from "../../components/CommentBox";
 import StandardBox from "../../components/standardBox";
 import Header from "../../components/Header";
 import { Box } from "@mui/material";
+import axios from "axios";
 
-const requiredInfo = ["Email", "Name", "Agent Name", "Agent Comments"];
+const requiredInfo = [
+  "Address",
+  "Email",
+  "Name",
+  "Agent Name",
+  "Agent Comments",
+];
 
 const questions = [
   "Bedroom 1",
@@ -18,46 +25,52 @@ const questions = [
   "Bedroom 3",
 ];
 
-// const sendFiles = async () => {
-//   const myFiles = document.getElementById("myFiles").files;
-//   const property = document.getElementById("property_addrs").value
-//   const formData = new FormData();
-//   property.replace(' ', '_');
-//   if (!myFiles.length) return;
-//   Object.keys(myFiles).forEach((key) => {
-//     formData.append(myFiles.item(key).name, myFiles.item(key));
-//   });
-//   formData.append('property', property);
-//   const response = await fetch("http://localhost:3000/upload", {
-//     method: "POST",
-//     body: formData,
-//   });
-//   const json = await response.json();
-//   console.log(json.message);
-// };
-
 const HomePage = () => {
-  const [selectedFile, setSelectedFile] = useState([]);
+  const [selectedFiles, setSelectedFile] = useState([]);
+  const [formSubmission, setFormSubmission] = useState({});
   const [comments, setComments] = useState({});
 
   const getSelectedFiles = (file) => {
-    let new_files = [...selectedFile];
+    let new_files = [...selectedFiles];
 
-    if (!selectedFile.includes(file)) {
-      new_files.push(file);
-    }
+    Object.values(file).forEach((e) => {
+      new_files.push(e);
+    });
+
     setSelectedFile(new_files);
-
-    console.log(new_files);
   };
 
   const getComments = (entry) => {
     let currentComments = { ...comments };
-    let id = entry.target.placeholder;
+    let id = entry.target.placeholder.replace(" ", "_").toLowerCase();
     currentComments[id] = entry.target.value;
     setComments(currentComments);
+  };
 
-    console.log(currentComments);
+  const sendSubmission = async (query, formFiles) => {
+    let formData = new FormData();
+
+    formFiles.forEach((e) => {
+      formData.append("files", e);
+    });
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/formsubmission/${query}`,
+        formData,
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmission = () => {
+    const formInfo = { ...comments };
+    const formFiles = [...selectedFiles];
+    const query = `?address=${formInfo.address}&name=${formInfo.name}&agent_name=${formInfo.agent_name}&agent_comments=${formInfo.agent_comments}&additional_comments=${formInfo.additional_comments}&email=${formInfo.email}`;
+
+    sendSubmission(query, formFiles);
   };
 
   return (
@@ -94,6 +107,8 @@ const HomePage = () => {
         title="Additional Comments"
         subtitle="Additional Comments"
         bLabel="Submit"
+        handleChange={getComments}
+        handleSubmission={handleSubmission}
       />
     </Box>
   );

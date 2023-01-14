@@ -3,7 +3,7 @@ import { Box, Typography, useTheme, Button, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { tokens } from "./../theme";
 
-const CommentBox = ({ title, subtitle }) => {
+const CommentBox = ({ title, subtitle, handleSubmission, handleChange }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -42,7 +42,8 @@ const CommentBox = ({ title, subtitle }) => {
 
         <TextField
           id="standard-textarea"
-          placeholder="Enter Comments"
+          placeholder={title}
+          onBlur={(e) => handleChange(e)}
           multiline
           variant="standard"
           sx={{
@@ -66,6 +67,7 @@ const CommentBox = ({ title, subtitle }) => {
             height: "1.5rem",
           }}
           endIcon={<SendIcon />}
+          onClick={() => handleSubmission()}
         >
           Submit
         </Button>

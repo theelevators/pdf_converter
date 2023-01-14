@@ -3,7 +3,7 @@ import { Box, Typography, useTheme, Button } from "@mui/material";
 import { tokens } from "./../theme";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
-const RequirementBox = ({ title, subtitle, getFiles }) => {
+const RequirementBox = ({ title, subtitle, handleChange }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -62,7 +62,7 @@ const RequirementBox = ({ title, subtitle, getFiles }) => {
             accept="image/*"
             multiple
             type="file"
-            onChange={(e) => getFiles(e.target.files)}
+            onChange={(e) => handleChange(e.target.files)}
           />
         </Button>
       </Box>
