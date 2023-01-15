@@ -6,6 +6,8 @@ import Header from "../../components/Header";
 import { Box } from "@mui/material";
 import axios from "axios";
 
+
+
 const requiredInfo = [
   "Address",
   "Email",
@@ -24,6 +26,7 @@ const questions = [
   "Dinning Room 1",
   "Bedroom 3",
 ];
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const HomePage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
@@ -53,10 +56,10 @@ const HomePage = () => {
     formFiles.forEach((e) => {
       formData.append("files", e);
     });
-
+    
     try {
       const response = await axios.post(
-        `http://localhost:8000/formsubmission/${query}`,
+        `${BASE_URL}formsubmission/${query}`,
         formData,
       );
       console.log(response);

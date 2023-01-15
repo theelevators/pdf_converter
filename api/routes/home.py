@@ -5,12 +5,12 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File
 from typing import List
+from fastapi.responses import FileResponse
 from util.api_utilities import *
 
 
 # Set up env
 load_dotenv(find_dotenv())
-password = os.environ["DB_CONNECTION"]
 main_path = os.path.dirname(
     os.environ.get("MAIN_PATH"))
 asset_path = os.path.dirname(
@@ -30,12 +30,26 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-
-@app.get('/')
+@app.get('/pdf/')
+async def download_pdf(id:str):
+    pdf = get_pdf(client, id)
+    return FileResponse(pdf)
+    
+@app.get('/home')
 async def root():
     return {"Message": "Hello World!"}
 
+@app.patch('/formsubmission/')
+async def update_form(id:str, pdf_path:str):
 
+    message = update_pdf_path(client, id, pdf_path)
+    return message
+
+@app.put('/email/')
+async def create_email(id:str):
+
+    send_email(client, id)
+  
 @app.post("/formsubmission/")
 async def upload(address: str, name: str, agent_name: str,
                  email: str,
@@ -60,4 +74,4 @@ async def upload(address: str, name: str, agent_name: str,
     create_file_location(main_path, path, files)
     insert_submission_form(client, form)
 
-    return {"message": f"Successfuly uploaded {name} {agent_name}  {agent_comments}   {additional_comments} "}
+    return {"message": "Thank you for the submission! Check your email for confirmation."}

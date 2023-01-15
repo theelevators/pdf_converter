@@ -1,6 +1,11 @@
 import os
+from dotenv import load_dotenv, find_dotenv
+import requests
 from PIL import Image
 
+load_dotenv(find_dotenv())
+
+api_ip = os.environ.get("API_IP")
 
 def create_pdf_file(address: str, location: str, id: str):
 
@@ -26,3 +31,13 @@ def create_pdf_file(address: str, location: str, id: str):
     images[0].save(
         final_path, "PDF", resolution=100.0, save_all=True, append_images=images[1:]
     )
+    return final_path
+
+def send_id(id,pdf_path):
+    response = requests.patch(f"{api_ip}formsubmission/?id={id}&pdf_path={pdf_path}" )
+    return response.json()
+
+def submit_email(id):
+    response = requests.put(f"{api_ip}email/?id={id}")
+    message = response.json()
+    return message

@@ -2,7 +2,6 @@ import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./scenes/home";
-import Sidebar from "./scenes/global/Sidebar";
 import Topbar from "./scenes/global/Topbar";
 
 function App() {
