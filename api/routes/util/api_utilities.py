@@ -19,12 +19,16 @@ def create_file_location(main_path, files_path, files):
     if os.path.exists(files_path) == False:
         os.makedirs(files_path)
     for file in files:
+        
         try:
+            print(file.filename)
             with open(file.filename, 'wb') as f:
+                print(file.filename)
                 shutil.copyfileobj(file.file, f)
             file_path = os.path.join(main_path, file.filename)
             shutil.move(file_path, os.path.join(files_path, file.filename))
         except Exception as err:
+            print(err)
             return {"message": "There was an error uploading the file(s)"}
         finally:
             file.file.close()

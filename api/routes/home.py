@@ -58,9 +58,10 @@ async def upload(address: str, name: str, agent_name: str,
                  files: List[UploadFile] = File(...)):
 
     address_dir = address.replace(" ", "_")
-    new_dir = f"{agent_name}\{address_dir}\\"
+    new_dir = f"{agent_name}/{address_dir}/"
+    print (new_dir)
     path = os.path.join(asset_path, new_dir)
-
+    print (path)
     form = {
         "address": address,
         "name": name,
