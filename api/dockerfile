@@ -151,4 +151,16 @@ COPY . .
 EXPOSE 8000
 # ["sh", "-c", "/etc/init.d/nullmailer start ; /usr/sbin/php5-fpm"]
 ENV PATH="${PATH}:~/.local/bin/"
+ENV DB_CONNECTION="mongodb://elevators13:Socorro0615!@ac-on7m3vi-shard-00-00.fzxyhvj.mongodb.net:27017,ac-on7m3vi-shard-00-01.fzxyhvj.mongodb.net:27017,ac-on7m3vi-shard-00-02.fzxyhvj.mongodb.net:27017/?ssl=true&replicaSet=atlas-fgupci-shard-0&authSource=admin&retryWrites=true&w=majority"
+ENV MAIN_PATH=/app/routes/
+ENV ASSET_PATH=/app/assets/
+ENV ORIGINS=http://localhost:3000
+ENV API_IP=http://localhost:8000/
+ENV EMAIL_HOST=smtp-mail.outlook.com
+ENV EMAIL_PORT=587
+
+
+
+
+
 CMD ["sh", "-c", "cd routes && python3 -m uvicorn home:app --host 0.0.0.0 --port 8000"]
