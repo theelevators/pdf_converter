@@ -157,10 +157,10 @@ ENV ORIGINS=http://localhost:3000
 ENV API_IP=http://localhost:8000/
 ENV EMAIL_HOST=smtp-mail.outlook.com
 ENV EMAIL_PORT=587
-RUN ls
 
 
 
 
 
-CMD ["sh", "-c", "cd routes && python3 -m uvicorn home:app --host 0.0.0.0 --port 8000"]
+ CMD ["sh", "-c", "ls"]
+# CMD ["sh", "-c", "cd routes && python3 -m uvicorn home:app --host 0.0.0.0 --port 8000"]
