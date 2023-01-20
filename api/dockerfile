@@ -142,7 +142,7 @@ USER app
 WORKDIR /app
 RUN mkdir assets
 # 
-COPY ../requirements.txt .
+COPY api/requirements.txt .
 # 
 RUN python3 -m pip install --no-cache-dir --upgrade -r requirements.txt
 RUN python3 -m pip install pymongo[srv]
