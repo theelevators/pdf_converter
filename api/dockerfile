@@ -144,7 +144,7 @@ RUN mkdir assets
 # 
 COPY api/requirements.txt .
 # 
-RUN python3 -m pip install --no-cache-dir --upgrade -r api/requirements.txt
+RUN python3 -m pip install --no-cache-dir --upgrade -r requirements.txt
 RUN python3 -m pip install pymongo[srv]
 # 
 COPY . .
