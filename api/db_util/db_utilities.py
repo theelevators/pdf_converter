@@ -13,8 +13,7 @@ def create_pdf_file(address: str, location: str, id: str):
     pdf_name = f"{address}.pdf"
     pdf_dir = os.path.join(img_path, "pdf_file/")
 
-    if os.path.exists(pdf_dir) == False:
-        os.makedirs(pdf_dir)
+    os.makedirs(pdf_dir)
 
     pdf_path = os.path.dirname(pdf_dir)
     size = 600, 600
