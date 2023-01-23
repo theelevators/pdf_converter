@@ -30,7 +30,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const HomePage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
-  const [formSubmission, setFormSubmission] = useState({});
+  
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
   const getSelectedFiles = (file) => {

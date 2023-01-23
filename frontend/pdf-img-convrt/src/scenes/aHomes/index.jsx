@@ -4,7 +4,6 @@ import CommentBox from "../../components/CommentBox";
 import StandardBox from "../../components/standardBox";
 import Header from "../../components/Header";
 import { Box } from "@mui/material";
-import Popup from 'reactjs-popup';
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
 

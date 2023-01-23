@@ -2,7 +2,6 @@ import { ColorModeContext, useMode } from "./theme";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./scenes/home";
-import Topbar from "./scenes/global/Topbar";
 import Landing from "./scenes/landing";
 import PremierPage from "./scenes/premier";
 import AmericanPage from "./scenes/aHomes";

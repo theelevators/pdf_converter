@@ -3,10 +3,10 @@ import { React, useState } from "react";
 import CommentBox from "../../components/CommentBox";
 import LoginIcon from '@mui/icons-material/Login';
 import Header from "../../components/Header";
-import { Box, useTheme } from "@mui/material";
+import { Box} from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { tokens } from "../../theme";
+
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -15,9 +15,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Landing = () => {
     const [authCode, setAuthCode] = useState("");
     const navigate = useNavigate();
-
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
 
     const getCode = (e) => {
         const currentCode = e.target.value; 
