@@ -7,7 +7,6 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from 'react-router-dom';
-
 const requiredInfo = [
   "Address",
   "Email",
@@ -16,23 +15,15 @@ const requiredInfo = [
   "Agent Comments",
 ];
 
-const questions = [
-  "Bedroom 1",
-  "Bathroom 1",
-  "Kitchen 1",
-  "Garage 1",
-  "Laundry Room 1",
-  "Patio 1",
-  "Dinning Room 1",
-  "Bedroom 3",
-];
+const questions = ["Kitchen", "Patio", "Garage", "Bathroom"];
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const HomePage = () => {
+const FirstKeyPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
-  const [formSubmission, setFormSubmission] = useState({});
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
+
   const getSelectedFiles = (file) => {
     let new_files = [...selectedFiles];
 
@@ -56,7 +47,7 @@ const HomePage = () => {
     formFiles.forEach((e) => {
       formData.append("files", e);
     });
-    
+
     try {
       const response = await axios.post(
         `${BASE_URL}formsubmission/${query}`,
@@ -124,10 +115,10 @@ const HomePage = () => {
         bLabel="Submit"
         handleChange={getComments}
         handleSubmission={handleSubmission}
-        icon={<SendIcon/>}
+        icon={<SendIcon />}
       />
     </Box>
   );
 };
 
-export default HomePage;
+export default FirstKeyPage;

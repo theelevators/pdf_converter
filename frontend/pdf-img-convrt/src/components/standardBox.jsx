@@ -1,18 +1,23 @@
 import React from "react";
 import { Box, Typography, useTheme, Button, TextField } from "@mui/material";
-
+import * as yup from "yup";
 import { tokens } from "./../theme";
 
-const StandardBox = ({ title, subtitle, getComment }) => {
+
+
+const StandardBox = ({ title, subtitle, getComment, val,
+  errors,
+  touched }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  
   return (
     <Box
       m="1rem"
       p=".8rem"
       borderRadius="5px"
       sx={{
-        backgroundColor: colors.grey[500],
+        backgroundColor: colors.greenAccent[500],
       }}
     >
       <Box
@@ -46,6 +51,9 @@ const StandardBox = ({ title, subtitle, getComment }) => {
           onBlur={(e) => getComment(e)}
           multiline
           variant="standard"
+          value={val}
+          error={!!touched && !!errors}
+          helperText={touched && errors}
           sx={{
             gridColumn: "span 6",
             gridRow: "2",

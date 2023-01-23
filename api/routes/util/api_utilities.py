@@ -10,6 +10,16 @@ load_dotenv(find_dotenv())
 api_ip = os.environ.get("API_IP")
 
 
+def get_page_path(client, id):
+    collection = client.fwt_project.routes
+    doc = collection.find_one({'accessCode': id})
+    return {"route": doc['route']}
+    # print(cursor['route'])
+
+    
+
+
+
 def insert_submission_form(client, document):
     collection = client.fwt_project.submissions
     collection.insert_one(document).inserted_id

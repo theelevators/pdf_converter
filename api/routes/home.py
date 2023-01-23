@@ -8,7 +8,7 @@ from typing import List
 from fastapi.responses import FileResponse
 from util.api_utilities import *
 
-subprocess.call(['sh', '/app/db_util/start-db.sh'], shell=True)
+# subprocess.call(['sh', '/app/db_util/start-db.sh'], shell=True)
 
 # Set up env
 load_dotenv(find_dotenv())
@@ -30,6 +30,13 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+@app.get('/form/')
+async def get_page(id:str):
+   return get_page_path(client, id)
+   
+#    print(route)
+
 
 @app.get('/pdf/')
 async def download_pdf(id:str):

@@ -1,20 +1,22 @@
 import React from "react";
 import { Box, Typography, useTheme, Button, TextField } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+
 import { tokens } from "./../theme";
 
-const CommentBox = ({ title, subtitle, handleSubmission, handleChange }) => {
+const CommentBox = ({ title, subtitle, handleSubmission, handleChange, buttonTitle="Submit", icon}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  
   return (
     <Box
       m="1rem"
       p=".8rem"
       borderRadius="5px"
       sx={{
-        backgroundColor: colors.grey[500],
+        backgroundColor: colors.greenAccent[500],
       }}
     >
+      
       <Box
         sx={{
           display: "grid",
@@ -43,6 +45,7 @@ const CommentBox = ({ title, subtitle, handleSubmission, handleChange }) => {
         <TextField
           id="standard-textarea"
           placeholder={title}
+        
           onBlur={(e) => handleChange(e)}
           multiline
           variant="standard"
@@ -52,6 +55,7 @@ const CommentBox = ({ title, subtitle, handleSubmission, handleChange }) => {
             color: colors.greenAccent[500],
             marginBottom: ".5rem",
             height: "1/2fr",
+            textAlign: "center"
           }}
         >
           {subtitle}
@@ -63,13 +67,13 @@ const CommentBox = ({ title, subtitle, handleSubmission, handleChange }) => {
             gridColumn: "5",
             gridRow: "3",
             width: "180%",
-            color: colors.greenAccent[500],
+            color: colors.redAccent[500],
             height: "1.5rem",
           }}
-          endIcon={<SendIcon />}
+          endIcon={icon}
           onClick={() => handleSubmission()}
         >
-          Submit
+          {buttonTitle}
         </Button>
       </Box>
     </Box>

@@ -13,7 +13,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
       p=".8rem"
       borderRadius="5px"
       sx={{
-        backgroundColor: colors.grey[500],
+        backgroundColor: colors.greenAccent[500],
       }}
     >
       <Box display="flex" justifyContent="space-between">
@@ -23,7 +23,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
             variant="h5"
             fontWeight="bold"
             sx={{
-              color: colors.grey[100],
+              color: colors.greenAccent[100],
             }}
           >
             {title}
@@ -51,7 +51,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
             width: "140%",
             minHeight: "2rem",
             maxHeight: "2rem",
-            color: colors.greenAccent[500],
+            color: colors.grey[500],
           }}
           endIcon={<PhotoCamera />}
         >

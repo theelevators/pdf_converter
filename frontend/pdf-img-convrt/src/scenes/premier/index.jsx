@@ -17,20 +17,18 @@ const requiredInfo = [
 ];
 
 const questions = [
-  "Bedroom 1",
-  "Bathroom 1",
-  "Kitchen 1",
-  "Garage 1",
-  "Laundry Room 1",
-  "Patio 1",
-  "Dinning Room 1",
-  "Bedroom 3",
+  "Kitchen",
+  "Patio",
+  "Garage",
+  "Roof",
+  "Walkway",
+  "Living Room"
 ];
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const HomePage = () => {
+const PremierPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
-  const [formSubmission, setFormSubmission] = useState({});
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
   const getSelectedFiles = (file) => {
@@ -74,7 +72,7 @@ const HomePage = () => {
     const query = `?address=${formInfo.address}&name=${formInfo.name}&agent_name=${formInfo.agent_name}&agent_comments=${formInfo.agent_comments}&additional_comments=${formInfo.additional_comments}&email=${formInfo.email}`;
     let email = comments['email']
     let validEmails = ['@gmail.com', '@outlook.com', '@hotmail.com', '@yahoo.com']
-    
+
     if (!email) {
       alert('A valid email is needed')
       return
@@ -87,7 +85,6 @@ const HomePage = () => {
     sendSubmission(query, formFiles);
     navigate('/success')
   };
-
   return (
     <Box>
       <Header
@@ -130,4 +127,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default PremierPage;

@@ -20,7 +20,7 @@ def create_pdf_file(address: str, location: str, id: str):
     images = []
     for f in os.listdir(img_path):
 
-        if '.jpg' in f:
+        if '.jpg' in f or '.jpeg'in f or '.png'in f:
             img = Image.open(os.path.join(img_path, f))
             img.thumbnail(size, Image.Resampling.LANCZOS)
             images.append(img)

@@ -4,33 +4,29 @@ import CommentBox from "../../components/CommentBox";
 import StandardBox from "../../components/standardBox";
 import Header from "../../components/Header";
 import { Box } from "@mui/material";
+import Popup from 'reactjs-popup';
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
+
 import { useNavigate } from 'react-router-dom';
+
 
 const requiredInfo = [
   "Address",
   "Email",
   "Name",
   "Agent Name",
-  "Agent Comments",
 ];
 
 const questions = [
-  "Bedroom 1",
-  "Bathroom 1",
-  "Kitchen 1",
-  "Garage 1",
-  "Laundry Room 1",
-  "Patio 1",
-  "Dinning Room 1",
-  "Bedroom 3",
+  "Kitchen",
+  "Patio"
 ];
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const HomePage = () => {
+const AmericanPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
-  const [formSubmission, setFormSubmission] = useState({});
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
   const getSelectedFiles = (file) => {
@@ -52,6 +48,7 @@ const HomePage = () => {
 
   const sendSubmission = async (query, formFiles) => {
     let formData = new FormData();
+    
 
     formFiles.forEach((e) => {
       formData.append("files", e);
@@ -130,4 +127,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AmericanPage;
