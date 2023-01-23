@@ -1,5 +1,5 @@
 import os
-import shutil
+import subprocess
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +8,7 @@ from typing import List
 from fastapi.responses import FileResponse
 from util.api_utilities import *
 
+subprocess.call(['sh', '/app/db_util/start-db.sh'], shell=True)
 
 # Set up env
 load_dotenv(find_dotenv())

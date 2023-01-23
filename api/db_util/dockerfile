@@ -142,7 +142,7 @@ USER app
 WORKDIR /app
 RUN mkdir assets
 # 
-COPY api/requirements.txt .
+COPY requirements.txt .
 # 
 RUN python3 -m pip install --no-cache-dir --upgrade -r requirements.txt
 RUN python3 -m pip install pymongo[srv]
@@ -151,10 +151,10 @@ COPY . .
 EXPOSE 8000
 # ["sh", "-c", "/etc/init.d/nullmailer start ; /usr/sbin/php5-fpm"]
 ENV PATH="${PATH}:~/.local/bin/"
-ENV MAIN_PATH=/app/routes/
+ENV MAIN_PATH=/app/
 ENV ASSET_PATH=/app/assets/
-ENV ORIGINS=http://localhost:3000
-ENV API_IP=http://localhost:8000/
+ENV ORIGINS=http://ec2-52-23-177-97.compute-1.amazonaws.com:3000
+ENV API_IP=http://ec2-52-23-177-97.compute-1.amazonaws.com:8000/
 ENV EMAIL_HOST=smtp-mail.outlook.com
 ENV EMAIL_PORT=587
 
@@ -163,4 +163,4 @@ ENV EMAIL_PORT=587
 
 
  
- CMD ["sh", "-c", "cd api/routes && python3 -m uvicorn home:app --host 0.0.0.0 --port 8000"]
+ CMD ["sh", "-c", "python3 listen_db.py"]
