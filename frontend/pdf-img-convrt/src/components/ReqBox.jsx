@@ -20,7 +20,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
         <Box>
           {/* {icon} */}
           <Typography
-            variant="h5"
+            variant="h4"
             fontWeight="bold"
             sx={{
               color: colors.greenAccent[100],
@@ -32,7 +32,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
       </Box>
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)" }}>
         <Typography
-          variant="h6"
+          variant="h5"
           sx={{
             gridRow: "1",
             gridColumn: "span 6",
@@ -54,6 +54,7 @@ const RequirementBox = ({ title, subtitle, handleChange }) => {
             color: colors.grey[500],
           }}
           endIcon={<PhotoCamera />}
+          
         >
           Upload
           <input

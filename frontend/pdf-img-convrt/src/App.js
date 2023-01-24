@@ -15,7 +15,7 @@ function App() {
         <CssBaseline />
         <div className="app">
           <main className="content">
-            <Box >
+            <Box display="flex" justifyContent="center" >
             <Routes>
               <Route path="/home" element={<HomePage />} />
               <Route path="/" element={<Landing />} />

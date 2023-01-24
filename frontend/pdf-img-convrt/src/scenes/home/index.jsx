@@ -13,18 +13,11 @@ const requiredInfo = [
   "Email",
   "Name",
   "Agent Name",
-  "Agent Comments",
 ];
 
 const questions = [
-  "Bedroom 1",
-  "Bathroom 1",
-  "Kitchen 1",
-  "Garage 1",
-  "Laundry Room 1",
-  "Patio 1",
-  "Dinning Room 1",
-  "Bedroom 3",
+  "Load your images",
+
 ];
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -89,10 +82,12 @@ const HomePage = () => {
   };
 
   return (
-    <Box>
+    <Box
+      paddingTop="1.5rem" maxWidth="800px"
+          minWidth="300px">
       <Header
-        title="Final Walk Trough Submission Form"
-        subtitle="Please completely fill the form before submitting"
+        title="Try it for yourself!"
+        subtitle="Enter mock data with your valid email and get a pdf of the uploaded images."
       />
       {requiredInfo.map((e) => {
         return (

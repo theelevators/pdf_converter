@@ -153,8 +153,8 @@ EXPOSE 8000
 ENV PATH="${PATH}:~/.local/bin/"
 ENV MAIN_PATH=/app/routes/
 ENV ASSET_PATH=/app/assets/
-ENV ORIGINS=http://ec2-52-23-177-97.compute-1.amazonaws.com:3000
-ENV API_IP=http://ec2-52-23-177-97.compute-1.amazonaws.com:8000/
+ENV ORIGINS=http://ec2-34-228-184-187.compute-1.amazonaws.com:3000
+ENV API_IP=http://ec2-34-228-184-187.compute-1.amazonaws.com:8000/
 ENV EMAIL_HOST=smtp-mail.outlook.com
 ENV EMAIL_PORT=587
 
