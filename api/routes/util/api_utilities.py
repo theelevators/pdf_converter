@@ -5,6 +5,8 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import smtplib
 from email.message import EmailMessage
+import pandas as pd
+import json
 
 load_dotenv(find_dotenv())
 api_ip = os.environ.get("API_IP")
@@ -16,7 +18,41 @@ def get_page_path(client, id):
     return {"route": doc['route']}
     # print(cursor['route'])
 
+
+def convert_id(id):
+    return str(id)
     
+
+    
+def get_all_submissions(client):
+    collection = client.fwt_project.submissions
+    headers = ['id','Address', 'Agent Name','Contact Email', 'Team Member','Agent Comments', 'Additional Comments', 'Photo Location', 'PDF Location']
+    query = {"pdf_path": {"$exists": "true"}}
+    try: 
+        docs = []
+        for doc in collection.find(query):
+           docs.append( [ str(doc['_id']),
+            doc['address'],
+            doc['name'],
+            doc['email'],
+            doc['agent'],
+            doc['agent_comments'],
+            doc['additional_comments'],
+            doc['files_location'],
+            doc['pdf_path']])
+            
+        data = pd.DataFrame(docs)
+        data.columns = headers
+        data = data.to_json(orient="records")
+        response = json.loads(data)
+        return {"success": response}
+    except Exception as err:
+        return {"error": err}
+    
+    
+    
+        
+   
 
 
 

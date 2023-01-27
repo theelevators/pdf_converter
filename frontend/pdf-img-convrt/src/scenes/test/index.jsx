@@ -6,9 +6,7 @@ import Header from "../../components/Header";
 import { Box } from "@mui/material";
 import axios from "axios";
 import SendIcon from "@mui/icons-material/Send";
-
 import { useNavigate } from 'react-router-dom';
-
 
 const requiredInfo = [
   "Address",
@@ -18,14 +16,14 @@ const requiredInfo = [
 ];
 
 const questions = [
-  "Kitchen",
-  "Patio"
-];
+  "Load your images",
 
+];
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const AmericanPage = () => {
+const TestPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
+  
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
   const getSelectedFiles = (file) => {
@@ -47,7 +45,6 @@ const AmericanPage = () => {
 
   const sendSubmission = async (query, formFiles) => {
     let formData = new FormData();
-    
 
     formFiles.forEach((e) => {
       formData.append("files", e);
@@ -86,10 +83,13 @@ const AmericanPage = () => {
 
   return (
     <Box display="flex" sx={{justifyContent: "center"}}>
-    <Box>
+    <Box
+      paddingTop="1.5rem" maxWidth="800px"
+      minWidth="300px"
+    >
       <Header
-        title="Final Walk Trough Submission Form"
-        subtitle="Please completely fill the form before submitting"
+        title="Try it for yourself!"
+        subtitle="Enter mock data with your valid email and get a pdf of the uploaded images."
       />
       {requiredInfo.map((e) => {
         return (
@@ -127,4 +127,4 @@ const AmericanPage = () => {
   );
 };
 
-export default AmericanPage;
+export default TestPage;

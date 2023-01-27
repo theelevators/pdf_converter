@@ -5,7 +5,7 @@ from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, File
 from typing import List
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from util.api_utilities import *
 
 # subprocess.call(['sh', '/app/db_util/start-db.sh'], shell=True)
@@ -42,6 +42,21 @@ async def get_page(id:str):
 async def download_pdf(id:str):
     pdf = get_pdf(client, id)
     return FileResponse(pdf)
+    
+@app.get('/submissions')
+async def download_pdf():
+    attempt = get_all_submissions(client)
+    
+    
+    attempt_message = attempt.keys()
+    
+    if 'success' in attempt_message:
+        values = attempt['success']
+        return {"message": [values]}
+    if 'error' in attempt_message:
+        return {"message": "An error has occurred. We have been notified."}
+        
+    
     
 @app.get('/home')
 async def root():

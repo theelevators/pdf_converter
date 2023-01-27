@@ -80,6 +80,7 @@ const FirstKeyPage = () => {
   };
 
   return (
+    <Box display="flex" sx={{justifyContent: "center"}}>
     <Box>
       <Header
         title="Final Walk Trough Submission Form"
@@ -117,7 +118,8 @@ const FirstKeyPage = () => {
         handleSubmission={handleSubmission}
         icon={<SendIcon />}
       />
-    </Box>
+      </Box>
+      </Box>
   );
 };
 
