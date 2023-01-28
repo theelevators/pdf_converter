@@ -11,7 +11,7 @@ import LoginPage from "./scenes/login";
 import HomePage from "./scenes/home";
 import Submissions from "./scenes/Submissions";
 import FAQ from "./scenes/faq";
-
+import FormPage from "./scenes/form";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -31,7 +31,8 @@ function App() {
               <Route path="/success" element={<ConfirmationPage />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/login" element={<LoginPage />} />
-                <Route path="/submissions" element={<Submissions />} />
+              <Route path="/submissions" element={<Submissions />} />
+              <Route path="/form" element={<FormPage />} />
 
               
               </Routes>
