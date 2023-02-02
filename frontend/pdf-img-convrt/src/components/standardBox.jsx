@@ -47,7 +47,7 @@ const StandardBox = ({ title, subtitle, getComment, val,
         <TextField
           id="standard-textarea"
           placeholder={subtitle}
-          onBlur={(e) => getComment(e)}
+          onBlur={ (e) => e ? getComment(e) : null}
           multiline
           variant="standard"
           value={val}
