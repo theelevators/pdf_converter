@@ -11,7 +11,7 @@ import LoginPage from "./scenes/login";
 import HomePage from "./scenes/home";
 import Submissions from "./scenes/Submissions";
 import FAQ from "./scenes/faq";
-import FormPage from "./scenes/form";
+import FormCreate from "./scenes/form";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -25,14 +25,14 @@ function App() {
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/test" element={<TestPage />} />
               <Route path="/" element={<Landing />} />
-              <Route path="/FRSTKTX" element={<FirstKeyPage />} />
+              <Route path="/:id" element={<FirstKeyPage />} />
               <Route path="/PRMTXH" element={<PremierPage />} />
               <Route path="/4H4ARTX" element={<AmericanPage />} />
               <Route path="/success" element={<ConfirmationPage />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/submissions" element={<Submissions />} />
-              <Route path="/form" element={<FormPage />} />
+              <Route path="/form" element={<FormCreate />} />
 
               
               </Routes>

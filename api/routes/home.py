@@ -3,7 +3,7 @@ import subprocess
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from typing import List
 from fastapi.responses import FileResponse, Response
 from util.api_utilities import *
@@ -99,3 +99,10 @@ async def upload(address: str, name: str, agent_name: str,
     insert_submission_form(client, form)
 
     return {"message": "Thank you for the submission! Check your email for confirmation."}
+
+
+
+@app.post("/saveform/")
+async def save_form(name:str, components:str = Form(...)):
+    print(name,components )
+    

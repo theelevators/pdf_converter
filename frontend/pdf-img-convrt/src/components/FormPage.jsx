@@ -5,28 +5,17 @@ import StandardBox from "../../components/standardBox";
 import Header from "../../components/Header";
 import { Box } from "@mui/material";
 import axios from "axios";
+import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from 'react-router-dom';
-import SubmitBox from "../../components/SubmitBox";
 
 
-const requiredInfo = [
-  "Address",
-  "Email",
-  "Name",
-  "Agent Name",
-];
-
-const questions = [
-  "Load your images",
-
-];
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const TestPage = () => {
+const FormPage = (requiredInfo, questions) => {
   const [selectedFiles, setSelectedFile] = useState([]);
-  
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
+
   const getSelectedFiles = (file) => {
     let new_files = [...selectedFiles];
 
@@ -50,7 +39,7 @@ const TestPage = () => {
     formFiles.forEach((e) => {
       formData.append("files", e);
     });
-    
+
     try {
       const response = await axios.post(
         `${BASE_URL}formsubmission/${query}`,
@@ -84,13 +73,10 @@ const TestPage = () => {
 
   return (
     <Box display="flex" sx={{justifyContent: "center"}}>
-    <Box
-      paddingTop="1.5rem" maxWidth="800px"
-      minWidth="300px"
-    >
+    <Box>
       <Header
-        title="Try it for yourself!"
-        subtitle="Enter mock data with your valid email and get a pdf of the uploaded images."
+        title="Final Walk Trough Submission Form"
+        subtitle="Please completely fill the form before submitting"
       />
       {requiredInfo.map((e) => {
         return (
@@ -115,11 +101,18 @@ const TestPage = () => {
           />
         );
       })}
-      <SubmitBox
+      <CommentBox
+        className="additional"
+        title="Additional Comments"
+        subtitle="Additional Comments"
+        bLabel="Submit"
+        handleChange={getComments}
         handleSubmission={handleSubmission}
-              />
-    </Box></Box>
+        icon={<SendIcon />}
+      />
+      </Box>
+      </Box>
   );
 };
 
-export default TestPage;
+export default FormPage;
