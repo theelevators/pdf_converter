@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from './../global/Sidebar';
 
 function HomePage() {
-    return (<Sidebar/>);
+    return (<></>);
 }
 
 export default HomePage;

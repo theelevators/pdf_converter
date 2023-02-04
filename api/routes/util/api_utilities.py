@@ -22,8 +22,50 @@ def get_page_path(client, id):
 def convert_id(id):
     return str(id)
     
-
+def upload_new_form(client, name, components):
+    collection = client.fwt_project.forms
     
+    document = {
+        "name": name,
+        "components": components
+    }
+    try:
+        collection.insert_one(document).inserted_id
+        return {"success": "Form Uploaded"}
+    except Exception as err:
+        return {"error": err}
+    
+    
+def update_saved_form(client, name, components):
+    
+    collection = client.fwt_project.forms
+    
+    myquery =  {'name': name} 
+    newvalues = { "$set": { "components": components } }
+    
+        
+    try:
+        collection.update_one( myquery, newvalues)
+        return {"message": "Form has been succesfully saved."}
+    except Exception as err:
+        return {"error": err}
+    
+
+
+
+
+
+
+
+
+
+def get_saved_form(client, name):
+    collection = client.fwt_project.forms
+    record = collection.find_one({'name': name})
+    components = record['components']
+    return components
+    
+
 def get_all_submissions(client):
     collection = client.fwt_project.submissions
     headers = ['id','Address', 'Agent Name','Contact Email', 'Team Member','Agent Comments', 'Additional Comments', 'Photo Location', 'PDF Location']
@@ -50,11 +92,6 @@ def get_all_submissions(client):
         return {"error": err}
     
     
-    
-        
-   
-
-
 
 def insert_submission_form(client, document):
     collection = client.fwt_project.submissions
@@ -88,6 +125,8 @@ def update_pdf_path(client, id, pdf_path):
     except Exception as err:
         return {"error message":err}
     return {"pdf_path": pdf_path}
+
+
 
 
 def send_email(client, id):

@@ -64,8 +64,8 @@ const Submissions = () => {
     
     
   return (
-    <Box display="flex" width="100%" height="100%">
-      <Sidebar />
+    
+      
       <Box width="inherit" sx={{backgroundColor: colors.greenAccent[800]}}>
         <Box mx="20px" mt="1rem" >
           <Header
@@ -113,7 +113,7 @@ const Submissions = () => {
           </Box>
         </Box>
       </Box>
-    </Box>
+    
   );
 };
 

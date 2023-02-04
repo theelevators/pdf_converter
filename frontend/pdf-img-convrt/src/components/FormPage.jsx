@@ -1,20 +1,72 @@
-import { React, useState } from "react";
-import RequirementBox from "../../components/ReqBox";
-import CommentBox from "../../components/CommentBox";
-import StandardBox from "../../components/standardBox";
-import Header from "../../components/Header";
+import { React, useState ,useEffect} from "react";
+import RequirementBox from "./ReqBox";
+import StandardBox from "./standardBox";
+import Header from "./Header";
 import { Box } from "@mui/material";
 import axios from "axios";
-import SendIcon from "@mui/icons-material/Send";
-import { useNavigate } from 'react-router-dom';
+
+import SubmitBox from "./SubmitBox";
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const FormPage = (requiredInfo, questions) => {
+
+
+
+
+
+
+const FormPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
+  const [components, setComponents] = useState({});
   const [comments, setComments] = useState({});
   const navigate = useNavigate();
+
+  const { id } = useParams()
+
+
+  const getForm = async () => {
+    
+    try {
+      const response = await axios.get(
+        `${BASE_URL}savedform/?name=${id}`
+      )
+      return response
+      
+    } catch (error) {
+    return error
+  }
+  
+  }
+  
+  const handleOpen = async () => {
+    
+    const formName = id
+    const formMessage = await getForm(formName)
+  
+    if (formMessage.status != 200) {
+      
+    }
+
+
+    const messageComponents = formMessage.data;
+    const newComponents = JSON.parse(messageComponents)
+    
+    setComponents(newComponents)
+
+  }
+
+
+  useEffect(() => {
+    handleOpen().then();
+  }, []);
+
+
+
+
+
+  
 
   const getSelectedFiles = (file) => {
     let new_files = [...selectedFiles];
@@ -51,6 +103,10 @@ const FormPage = (requiredInfo, questions) => {
     }
   };
 
+
+
+
+
   const handleSubmission = () => {
     const formInfo = { ...comments };
     const formFiles = [...selectedFiles];
@@ -78,38 +134,40 @@ const FormPage = (requiredInfo, questions) => {
         title="Final Walk Trough Submission Form"
         subtitle="Please completely fill the form before submitting"
       />
-      {requiredInfo.map((e) => {
-        return (
-          <StandardBox
-            className={e}
-            key={e}
-            title={e}
-            subtitle={`${e}`}
-            getComment={getComments}
-          />
-        );
-      })}
+{Object.entries(components).map(([key, value]) => {
+                  let type = value;
+                  let title = key;
 
-      {questions.map((e) => {
-        return (
-          <RequirementBox
-            className={e.replace(" ", "")}
-            key={e}
-            title={e}
-            subtitle={`Images For ${e}`}
-            handleChange={getSelectedFiles}
-          />
-        );
-      })}
-      <CommentBox
-        className="additional"
-        title="Additional Comments"
-        subtitle="Additional Comments"
-        bLabel="Submit"
-        handleChange={getComments}
-        handleSubmission={handleSubmission}
-        icon={<SendIcon />}
-      />
+                  let boxKey = key + value;
+
+                  return type == "New Image Input" ? (
+                    <Box key={boxKey} p="1rem">
+                      <RequirementBox
+                        className={title.replace(" ", "")}
+                        title={title}
+                        subtitle={`Images For ${title}`}
+                        handleChange={getSelectedFiles}
+                      />{" "}
+                    </Box>
+                  ) : (
+                    <Box key={boxKey} p="1rem">
+                                <StandardBox
+                        className={title}
+                        key={title}
+                        title={title}
+                        subtitle={`${title}`}
+                        getComment={getComments}
+                      />
+                    </Box>
+                  );
+                })}
+              <Box
+              sx={{
+                paddingX: "5.5rem",
+              }}
+            >
+              <SubmitBox handleSubmission={handleSubmission} />
+            </Box>
       </Box>
       </Box>
   );

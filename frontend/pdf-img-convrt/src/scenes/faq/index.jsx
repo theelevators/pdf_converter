@@ -5,14 +5,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { tokens } from "../../theme";
-import Sidebar from "../global/Sidebar";
 const FAQ = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   return (
-    <Box display="flex" width="100%" height="100%" sx={{ backgroundColor: colors.greenAccent[800] }}>
-      <Sidebar />
+
       <Box width="inherit" >
       <Box m="20px" >
         <Header title="FAQ" subtitle="Frequently Asked Questions Page" />
@@ -92,7 +90,7 @@ const FAQ = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-    </Box></Box>
+    </Box>
   );
 };
 export default FAQ;

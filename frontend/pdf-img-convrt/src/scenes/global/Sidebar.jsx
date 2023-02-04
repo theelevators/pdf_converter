@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { tokens } from "../../theme";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -38,6 +38,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
 
   return (
+    <Box display="flex" width="100%" height="100%">
     <Box
       height="100%"
       sx={{
@@ -117,56 +118,56 @@ const Sidebar = () => {
             )}
             <Item
               title="New Form"
-              to="/form"
+              to="/admin/form"
               icon={<AddBoxIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Submissions"
-              to="/submissions"
+              to="/admin/submissions"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Markets"
-              to="/markets"
+              to="/admin/markets"
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Partners"
-              to="/partners"
+              to="/admin/partners"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Team"
-              to="/team"
+              to="/admin/team"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />{" "}
             <Item
               title="Contacts Info"
-              to="/contacts"
+              to="/admin/contacts"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Folders"
-              to="/folders"
+              to="/admin/folders"
               icon={<InventoryIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="FAQ Page"
-              to="/faq"
+              to="/admin/faq"
               icon={<HelpOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -174,7 +175,9 @@ const Sidebar = () => {
           </Box>
         </Menu>
       </ProSidebar>
-    </Box>
+      </Box>
+      <Outlet/>
+      </Box>
   );
 };
 

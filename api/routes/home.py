@@ -104,5 +104,13 @@ async def upload(address: str, name: str, agent_name: str,
 
 @app.post("/saveform/")
 async def save_form(name:str, components:str = Form(...)):
-    print(name,components )
+    return upload_new_form(client, name, components)
+
+@app.patch("/updateform/")
+async def update_form_component(name:str, components:str = Form(...)):
     
+    return update_saved_form(client, name, components)
+
+@app.get("/savedform/")
+async def load_form(name:str):
+    return(get_saved_form(client, name))

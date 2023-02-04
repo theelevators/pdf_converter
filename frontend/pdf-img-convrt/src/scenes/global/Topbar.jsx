@@ -146,11 +146,11 @@ const Topbar = () => {
                   maxHeight: "3rem",
                   paddingX: "2rem",
                   margin: "1.5rem",
-                  color: colors.grey[500],
+                  color: colors.grey[100],
                 }}
                 endIcon={<SaveIcon />}
               >
-                Save Form
+                Save Forma
               </Button>
             </Box>
           </Box>

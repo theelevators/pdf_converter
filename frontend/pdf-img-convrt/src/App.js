@@ -3,15 +3,16 @@ import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import TestPage from "./scenes/test";
 import Landing from "./scenes/landing";
-import PremierPage from "./scenes/premier";
-import AmericanPage from "./scenes/aHomes";
-import FirstKeyPage from "./scenes/firstKey";
+import FormPage from "./components/FormPage";
 import ConfirmationPage from "./scenes/confirmation";
 import LoginPage from "./scenes/login";
 import HomePage from "./scenes/home";
-import Submissions from "./scenes/Submissions";
+import NotFound from "./scenes/notFound";
 import FAQ from "./scenes/faq";
+import Sidebar from "./scenes/global/Sidebar";
+
 import FormCreate from "./scenes/form";
+import Submissions from "./scenes/Submissions/index";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -22,20 +23,28 @@ function App() {
         <div className="app">
           <main className="content">
             <Routes>
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/test" element={<TestPage />} />
-              <Route path="/" element={<Landing />} />
-              <Route path="/:id" element={<FirstKeyPage />} />
-              <Route path="/PRMTXH" element={<PremierPage />} />
-              <Route path="/4H4ARTX" element={<AmericanPage />} />
-              <Route path="/success" element={<ConfirmationPage />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/submissions" element={<Submissions />} />
-              <Route path="/form" element={<FormCreate />} />
 
               
-              </Routes>
+              <Route path="/submissions">
+
+              <Route index element={<Landing />} />
+              <Route path=":id" element={<FormPage />} />
+              <Route path="success" element={<ConfirmationPage />} />
+
+              </Route>
+
+
+
+              <Route path="/admin" element={<Sidebar/>}>
+                <Route index element={<LoginPage />} />
+                <Route path="form" element={<FormCreate />} />
+                <Route path="home" element={<HomePage />} />
+                <Route path="faq" element={<FAQ />} />
+                <Route path="submissions" element={<Submissions />} />
+              <Route path="formtest" element={<TestPage />} />
+              </Route>
+              <Route path="/*" element={<NotFound />} />
+            </Routes>
           </main>
         </div>
       </ThemeProvider>
