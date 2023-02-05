@@ -24,13 +24,14 @@ const FormPage = () => {
   const navigate = useNavigate();
 
   const { id } = useParams()
+  const pageName = id
 
 
   const getForm = async () => {
     
     try {
       const response = await axios.get(
-        `${BASE_URL}savedform/?name=${id}`
+        `${BASE_URL}savedform/?name=${pageName}`
       )
       return response
       
@@ -42,7 +43,7 @@ const FormPage = () => {
   
   const handleOpen = async () => {
     
-    const formName = id
+    const formName = pageName
     const formMessage = await getForm(formName)
   
     if (formMessage.status != 200) {
@@ -103,6 +104,30 @@ const FormPage = () => {
     }
   };
 
+
+  const handleGeneric = async () => {
+    const formInfo = JSON.stringify(comments);
+    const formFiles = [...selectedFiles];
+    const formName = pageName
+    const query = `?name=${formName}&entries=${formInfo}`;
+    let formData = new FormData();
+
+    formFiles.forEach((e) => {
+      formData.append("files", e);
+    });
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}generalform/${query}`,
+        formData,
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+
+
+  }
 
 
 
@@ -166,7 +191,7 @@ const FormPage = () => {
                 paddingX: "5.5rem",
               }}
             >
-              <SubmitBox handleSubmission={handleSubmission} />
+              <SubmitBox handleSubmission={handleGeneric} />
             </Box>
       </Box>
       </Box>

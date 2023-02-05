@@ -82,9 +82,9 @@ async def upload(address: str, name: str, agent_name: str,
 
     address_dir = address.replace(" ", "_")
     new_dir = f"{agent_name}/{address_dir}/"
-    print (new_dir)
+    # print (new_dir)
     path = os.path.join(asset_path, new_dir)
-    print (path)
+    # print (path)
     form = {
         "address": address,
         "name": name,
@@ -100,6 +100,20 @@ async def upload(address: str, name: str, agent_name: str,
 
     return {"message": "Thank you for the submission! Check your email for confirmation."}
 
+
+
+@app.post("/generalform/")
+async def upload(name: str, entries:str,
+                 
+                 files: List[UploadFile] = File(...)):
+    
+    form_id = upload_generic_form(client, entries)
+    
+    new_dir = f"{name}/{form_id}/"
+    path = os.path.join(asset_path, new_dir)
+    message = create_file_location(main_path, path, files)
+    
+    return message
 
 
 @app.post("/saveform/")

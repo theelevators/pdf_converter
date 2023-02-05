@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import smtplib
 from email.message import EmailMessage
-import pandas as pd
+
 import json
 
 load_dotenv(find_dotenv())
@@ -49,14 +49,23 @@ def update_saved_form(client, name, components):
         return {"message": "Form has been succesfully saved."}
     except Exception as err:
         return {"error": err}
+
+
+
+def upload_generic_form(client, data):
+    collection = client.fwt_project.general_submissions
+    document = json.loads(data)
+    form_id = collection.insert_one(document).inserted_id
+    form_id = str(form_id)
+    return form_id
+    
+    print(form_id)
+    # record_id = collection.insert_one(data).inserted_id
+    
     
 
 
-
-
-
-
-
+    
 
 
 def get_saved_form(client, name):
@@ -82,10 +91,9 @@ def get_all_submissions(client):
             doc['additional_comments'],
             doc['files_location'],
             doc['pdf_path']])
-            
-        data = pd.DataFrame(docs)
-        data.columns = headers
-        data = data.to_json(orient="records")
+        
+        docs.insert(headers)
+        data = json.dumps(docs)
         response = json.loads(data)
         return {"success": response}
     except Exception as err:
@@ -102,16 +110,12 @@ def create_file_location(main_path, files_path, files):
     if os.path.exists(files_path) == False:
         os.makedirs(files_path)
     for file in files:
-        
         try:
-            print(file.filename)
             with open(file.filename, 'wb') as f:
-                print(file.filename)
                 shutil.copyfileobj(file.file, f)
             file_path = os.path.join(main_path, file.filename)
             shutil.move(file_path, os.path.join(files_path, file.filename))
         except Exception as err:
-            print(err)
             return {"message": "There was an error uploading the file(s)"}
         finally:
             file.file.close()
@@ -125,8 +129,6 @@ def update_pdf_path(client, id, pdf_path):
     except Exception as err:
         return {"error message":err}
     return {"pdf_path": pdf_path}
-
-
 
 
 def send_email(client, id):

@@ -38,7 +38,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
 
   return (
-    <Box display="flex" width="100%" height="100%">
+    <Box display="flex" width="100%" height="100%" zIndex={1}>
     <Box
       height="100%"
       sx={{

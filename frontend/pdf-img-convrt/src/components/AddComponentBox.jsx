@@ -60,7 +60,7 @@ const NewComponentBox = ({handleNewComponent}) => {
   return (
     <Box
       sx={{
-        paddingX: "3rem",
+        
         display: "flex",
 
         justifyContent: "flex-end",

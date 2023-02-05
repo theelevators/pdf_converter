@@ -9,10 +9,14 @@ body,
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
 }
-
+#portal{
+  position: absolute;
+  z-index: 1;
+}
 .app {
   display: flex;
   position: relative;
+  z-index: 0;
 }
 
 ::-webkit-scrollbar {

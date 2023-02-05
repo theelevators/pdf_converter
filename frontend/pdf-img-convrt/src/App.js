@@ -1,4 +1,4 @@
-import { ColorModeContext, useMode } from "./theme";
+import { ColorModeContext, useMode, tokens } from "./theme";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import TestPage from "./scenes/test";
@@ -15,7 +15,9 @@ import FormCreate from "./scenes/form";
 import Submissions from "./scenes/Submissions/index";
 
 function App() {
+
   const [theme, colorMode] = useMode();
+  
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -23,27 +25,24 @@ function App() {
         <div className="app">
           <main className="content">
             <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<LoginPage />} />
 
               
               <Route path="/submissions">
-
-              <Route index element={<Landing />} />
-              <Route path=":id" element={<FormPage />} />
-              <Route path="success" element={<ConfirmationPage />} />
-
+                <Route path=":id" element={<FormPage />} />
+                <Route path="success" element={<ConfirmationPage />} />
               </Route>
-
-
-
-              <Route path="/admin" element={<Sidebar/>}>
-                <Route index element={<LoginPage />} />
+              <Route path="/admin" element={<Sidebar />}>
+                <Route index element={<HomePage />} />
                 <Route path="form" element={<FormCreate />} />
-                <Route path="home" element={<HomePage />} />
                 <Route path="faq" element={<FAQ />} />
                 <Route path="submissions" element={<Submissions />} />
-              <Route path="formtest" element={<TestPage />} />
+                <Route path="formtest" element={<TestPage />} />
               </Route>
+
               <Route path="/*" element={<NotFound />} />
+              
             </Routes>
           </main>
         </div>

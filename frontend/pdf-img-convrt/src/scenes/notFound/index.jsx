@@ -40,7 +40,7 @@ const NotFound = () => {
             
           }}
           size="small">
-            <Link to="/submissions">
+            <Link to="/">
             <ReplayIcon />
               </Link>
 
