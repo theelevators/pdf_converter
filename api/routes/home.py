@@ -1,14 +1,15 @@
 import os
-import subprocess
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, Body, Depends
 from typing import List
-from fastapi.responses import FileResponse, Response
+# from fastapi.responses import FileResponse, Response
 from util.api_utilities import *
+from util.model import UserSchema, UserLoginSchema, AuthCodeSchema
+from util.jwt_handler import sign_JWT, auth_submitter
+from util.jwt_bearer import jwtBearer
 
-# subprocess.call(['sh', '/app/db_util/start-db.sh'], shell=True)
 
 # Set up env
 load_dotenv(find_dotenv())
@@ -31,100 +32,97 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-@app.get('/form/')
-async def get_page(id:str):
-   return get_page_path(client, id)
-   
-#    print(route)
+
+users = []
+
+formCodes = []
 
 
-@app.get('/pdf/')
-async def download_pdf(id:str):
-    pdf = get_pdf(client, id)
-    return FileResponse(pdf)
-    
-@app.get('/submissions')
-async def download_pdf():
-    attempt = get_all_submissions(client)
-    
-    
-    attempt_message = attempt.keys()
-    
-    if 'success' in attempt_message:
-        values = attempt['success']
-        return {"message": [values]}
-    if 'error' in attempt_message:
-        return {"message": "An error has occurred. We have been notified."}
-        
-    
-    
+@app.get('/form/', tags=["forms"], dependencies=[Depends(jwtBearer())])
+async def get_page(id: str):
+    return get_page_path(client, id)
+
+
 @app.get('/home')
 async def root():
     return {"Message": "Hello World!"}
 
-@app.patch('/formsubmission/')
-async def update_form(id:str, pdf_path:str):
 
-    message = update_pdf_path(client, id, pdf_path)
-    return message
+@app.post("/form/", tags=["forms"], dependencies=[Depends(jwtBearer())])
+async def upload(name: str, entries: str,
 
-@app.put('/email/')
-async def create_email(id:str):
-
-    send_email(client, id)
-  
-@app.post("/formsubmission/")
-async def upload(address: str, name: str, agent_name: str,
-                 email: str,
-                 agent_comments: str,
-                 additional_comments: str,
                  files: List[UploadFile] = File(...)):
 
-    address_dir = address.replace(" ", "_")
-    new_dir = f"{agent_name}/{address_dir}/"
-    # print (new_dir)
-    path = os.path.join(asset_path, new_dir)
-    # print (path)
-    form = {
-        "address": address,
-        "name": name,
-        "email": email,
-        "agent": agent_name,
-        "agent_comments": agent_comments,
-        "additional_comments": additional_comments,
-        "files_location": path
-
-    }
-    create_file_location(main_path, path, files)
-    insert_submission_form(client, form)
-
-    return {"message": "Thank you for the submission! Check your email for confirmation."}
-
-
-
-@app.post("/generalform/")
-async def upload(name: str, entries:str,
-                 
-                 files: List[UploadFile] = File(...)):
-    
     form_id = upload_generic_form(client, entries)
-    
+
     new_dir = f"{name}/{form_id}/"
     path = os.path.join(asset_path, new_dir)
     message = create_file_location(main_path, path, files)
-    
+
     return message
 
 
-@app.post("/saveform/")
-async def save_form(name:str, components:str = Form(...)):
+@app.post("/user/saveform/", dependencies=[Depends(jwtBearer())], tags=["user"])
+async def save_form(name: str, components: str = Form(...)):
     return upload_new_form(client, name, components)
 
-@app.patch("/updateform/")
-async def update_form_component(name:str, components:str = Form(...)):
-    
+
+@app.patch("/user/updateform/", dependencies=[Depends(jwtBearer())], tags=["user"])
+async def update_form_component(name: str, components: str = Form(...)):
+
     return update_saved_form(client, name, components)
 
-@app.get("/savedform/")
-async def load_form(name:str):
-    return(get_saved_form(client, name))
+
+@app.get("/user/savedform/", dependencies=[Depends(jwtBearer())], tags=["user"])
+async def load_form(name: str):
+    return (get_saved_form(client, name))
+
+# Form auth
+
+
+def check_auth_code(data: AuthCodeSchema):
+    for code in formCodes:
+        if code.authCode == data.authCode:
+            return True
+        return False
+
+
+@app.post('/form/verifyauthcode', tags=["forms"], dependencies=[Depends(jwtBearer())])
+async def verify_auth_code(authCode: AuthCodeSchema = Body(default=None)):
+    if check_auth_code(authCode):
+        return auth_submitter(authCode)
+    else:
+        return {
+            "error": "Invalid login info"
+        }
+
+
+# User auth
+@app.post('/user/signup', tags=["user"])
+async def user_signup(user: UserSchema = Body(default=None)):
+    users.append(user)
+    return {"message": "Account Sucessfully Created"}
+
+
+def check_user(data: UserLoginSchema):
+    for user in users:
+        if user.email == data.email and user.password == data.password:
+            return True
+        return False
+
+
+@app.post("/user/login", tags=["user"])
+async def user_login(user: UserLoginSchema = Body(default=None)):
+    if check_user(user):
+        return sign_JWT(user.email)
+    else:
+        return {
+            "error": "Invalid login info"
+        }
+
+
+@app.post('/user/form/newformauth', tags=["user"], dependencies=[Depends(jwtBearer())])
+async def auth_code_creation(authCode: AuthCodeSchema =
+                             Body(default=None)):
+    formCodes.append(authCode)
+    return {"message": "Form Code Sucessfully Created"}

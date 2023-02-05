@@ -42,3 +42,5 @@ watchfiles==0.18.1
 websockets==10.4
 yarg==0.1.9
 zipp==3.11.0
+PyJWT==1.7.1
+python-decouple==3.3

@@ -75,9 +75,6 @@ const FormCreate = () => {
       }
     }
 
-
-
-
   };
 
   const getForm = async (formName) => {
