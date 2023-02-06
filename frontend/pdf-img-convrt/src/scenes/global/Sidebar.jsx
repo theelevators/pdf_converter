@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
@@ -13,7 +14,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import profilePic from "../../assets/profilepic.jpg";
+import profilePic from "../../assets/generic_profile.svg";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -36,6 +37,8 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const { id } = useParams()
+  const user = id
 
   return (
     <Box display="flex" width="100%" height="100%" zIndex={1}>
@@ -88,9 +91,12 @@ const Sidebar = () => {
                 <img
                   alt="profile-user"
                   width="100px"
-                  height="100px"
+                    height="100px"
+                    
                   src={profilePic}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                    style={{
+                      cursor: "pointer", borderRadius: "50%",
+                    backgroundColor: colors.primary[200]}}
                 />
               </Box>
               <Box textAlign="center">
@@ -100,7 +106,7 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Tom Vazquez
+                  {user}
                 </Typography>
               </Box>
             </Box>
@@ -118,56 +124,22 @@ const Sidebar = () => {
             )}
             <Item
               title="New Form"
-              to="/admin/form"
+              to="form"
               icon={<AddBoxIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Submissions"
-              to="/admin/submissions"
+              to="submissions"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
-            <Item
-              title="Markets"
-              to="/admin/markets"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Partners"
-              to="/admin/partners"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Team"
-              to="/admin/team"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />{" "}
-            <Item
-              title="Contacts Info"
-              to="/admin/contacts"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Folders"
-              to="/admin/folders"
-              icon={<InventoryIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            /> */}
+            
             <Item
               title="FAQ Page"
-              to="/admin/faq"
+              to="faq"
               icon={<HelpOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

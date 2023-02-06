@@ -1,10 +1,25 @@
 import React, { useState } from "react";
-import { useTheme, Box, TextField, Button, Paper } from "@mui/material";
+import { useTheme, Box, Button, Paper, InputAdornment, IconButton, TextField } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { tokens } from "../../theme";
 import Login from "@mui/icons-material/Login";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-function LoginPage() {
+
+
+
+
+
+
+
+function LoginPage({handleUserName,handlePassword, handleLogin}) {
+ 
+  const [showPassword, setShowPassword] = useState(false);
+const handleClickShowPassword = () => setShowPassword(!showPassword);
+const handleMouseDownPassword = () => setShowPassword(!showPassword)
+
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -18,7 +33,7 @@ function LoginPage() {
           }}
     >
       <Paper
-              borderRadius="5px"
+              
               elevation={12}
         sx={{
             backgroundColor: colors.greenAccent[500],
@@ -59,7 +74,8 @@ function LoginPage() {
           <TextField
             id="standard-textarea"
             placeholder="User Name"
-                      variant="standard"
+            variant="standard"
+            onBlur={(e)=> e ? handleUserName(e) : null}
                       
             sx={{
               gridColumn: "span 6",
@@ -75,8 +91,11 @@ function LoginPage() {
 
           <TextField
             id="standard-textarea"
+            type={showPassword ? "text" : "password"}
+            
             placeholder="Password"
             variant="standard"
+            onBlur={(e)=> e ? handlePassword(e) : null}
             sx={{
               gridColumn: "span 6",
               gridRow: "3",
@@ -86,10 +105,29 @@ function LoginPage() {
                 marginX: "1.5rem",
               height: "1/2fr",
             }}
-          ></TextField>
+            InputProps={{ // <-- This is where the toggle button is added.
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          >
+
+
+
+
+          </TextField>
           <Button
             variant="contained"
             component="label"
+            onClick={()=>{handleLogin()}}
             sx={{
               gridRow: "4",
               gridColumn: "5",
@@ -97,6 +135,7 @@ function LoginPage() {
               minHeight: "2rem",
               maxHeight: "2rem",
               color: colors.grey[300],
+            
                       }}
                       endIcon={<Login/>}
           >

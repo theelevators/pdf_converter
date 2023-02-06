@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 class UserSchema(BaseModel):
-    fullname: str = Field(default=None)
+    username: str = Field(default=None)
     email: EmailStr = Field(default=None)
     password: str = Field(default=None)
 
@@ -15,12 +15,12 @@ class UserSchema(BaseModel):
 
 
 class UserLoginSchema(BaseModel):
-    email: EmailStr = Field(default=None)
+    username: str = Field(default=None)
     password: str = Field(default=None)
 
     class Config:
         the_schema = {
-            "email": "elevatorstest@outlook.com",
+            "username": "theelevators",
             "password": "123"
         }
 
@@ -32,3 +32,29 @@ class AuthCodeSchema(BaseModel):
         the_schema = {
             "authCode": "POGGERS",
         }
+
+class FormCodeSchema(BaseModel):
+    username: str = Field(default=None)
+    formName: str = Field(default=None)
+    authCode: str = Field(default=None)
+
+    class Config:
+        the_schema = {
+            "authCode": "POGGERS",
+        }
+        
+        
+class SaveComponentSchema(BaseModel):
+    username: str = Field(default=None)
+    formName: str = Field(default=None)
+    authCode: str = Field(default=None)
+    components: str = Field(default=None)
+
+    class Config:
+        the_schema = {
+            "authCode": "POGGERS",
+        }
+
+
+
+    

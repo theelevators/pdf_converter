@@ -13,10 +13,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
 
-
-
-
-
 const FormPage = () => {
   const [selectedFiles, setSelectedFile] = useState([]);
   const [components, setComponents] = useState({});

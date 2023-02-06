@@ -17,7 +17,7 @@ const options = ["New Question Input", "New Image Input"];
 
 
 
-const NewComponentBox = ({handleNewComponent}) => {
+const NewComponentBox = ({handleNewComponentModal}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const anchorRef = useRef(null);
@@ -43,10 +43,8 @@ const NewComponentBox = ({handleNewComponent}) => {
     setSelectedIndex(index);
     setOpen(false);
 
-    
-    const newEntry = window.prompt("Enter Entry Title");
 
-    handleNewComponent(newEntry, options[index]);
+    handleNewComponentModal(options[index]);
   };
 
   const handleToggle = () => {

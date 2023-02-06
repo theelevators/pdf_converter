@@ -1,8 +1,10 @@
 import os
 import shutil
+import hashlib
 from dotenv import load_dotenv, find_dotenv
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+
 import json
 
 
@@ -12,17 +14,60 @@ api_ip = os.environ.get("API_IP")
 
 def get_page_path(client, id):
     collection = client.fwt_project.routes
-    doc = collection.find_one({'accessCode': id})
-    return {"route": doc['route']}
+    try:
+        doc = collection.find_one({'accessCode': id})
+        return {"route": doc['route']}
+    except:
+        return {"error": "Entry Not Found"}
     
 
+async def verify_new_user(client, username):
+    collection = client.fwt_project.users
+    try:
+        doc = collection.find_one({'username': username})
+        if doc:
+            return False
+    except Exception as err:
+        return True
+    return True
+
+
+def create_new_user(client, username, email, password):
+    collection = client.fwt_project.users
+    document = {
+        "username": username,
+        "email": email,
+        "password": hashlib.sha256(bytes(password, 'utf-8')).hexdigest()
+    }
+    try:
+        doc_id = collection.insert_one(document).inserted_id
+        return {"message": "User has been created!"}
+    except:
+        return {"error": "Unable to create user"}
     
-def upload_new_form(client, name, components):
+
+
+def verify_login(client, username, password):
+    collection = client.fwt_project.users
+    try:
+        doc = collection.find_one({'username': username})
+        if hashlib.sha256(bytes(password, 'utf-8')).hexdigest() == doc['password']:
+            return True
+    except:
+        return False
+
+
+
+    
+def upload_new_form(client, data):
     collection = client.fwt_project.forms
     
     document = {
-        "name": name,
-        "components": components
+        "username": data.username,
+        "authCode": data.authCode,
+        "formName": data.formName,
+        "components": data.components
+        
     }
     try:
         collection.insert_one(document).inserted_id
@@ -31,12 +76,12 @@ def upload_new_form(client, name, components):
         return {"error": err}
     
     
-def update_saved_form(client, name, components):
+def update_saved_form(client, data):
     
     collection = client.fwt_project.forms
     
-    myquery =  {'name': name} 
-    newvalues = { "$set": { "components": components } }
+    myquery =  {'formName': data.formName} 
+    newvalues = { "$set": { "components": data.components } }
        
     try:
         collection.update_one( myquery, newvalues)
@@ -57,10 +102,38 @@ def upload_generic_form(client, data):
 
 def get_saved_form(client, name):
     collection = client.fwt_project.forms
-    record = collection.find_one({'name': name})
-    components = record['components']
-    return components
+    record = collection.find_one({'formName': name})
     
+    if record:
+        components = record['components']
+        
+        return components
+       
+    else:
+        
+        return {"error": "Form Not Found"}
+    
+
+async def insert_new_form_code(client, data):
+    collection = client.fwt_project.access_codes
+    document = dict(data)
+    try:
+        collection.insert_one(document)
+        return "OK"
+    except:
+        return "ERROR"
+
+        
+def check_auth_code(client, data):
+    collection = client.fwt_project.access_codes
+    try:
+        record = collection.find_one({'authCode': data.authCode})
+        if record:
+            return True
+        return False
+    except:
+        return False
+
 
 def insert_submission_form(client, document):
     collection = client.fwt_project.submissions
