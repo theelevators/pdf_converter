@@ -13,10 +13,10 @@ load_dotenv(find_dotenv())
 api_ip = os.environ.get("API_IP")
 
 def get_page_path(client, id):
-    collection = client.fwt_project.routes
+    collection = client.fwt_project.forms
     try:
         doc = collection.find_one({'accessCode': id})
-        return {"route": doc['route']}
+        return {"route": doc['path']}
     except:
         return {"error": "Entry Not Found"}
     
@@ -66,27 +66,57 @@ def upload_new_form(client, data):
         "username": data.username,
         "authCode": data.authCode,
         "formName": data.formName,
-        "components": data.components
-        
+        "components": data.components,
+        "path" : f"/submissions/{data.formName}"
     }
     try:
         collection.insert_one(document).inserted_id
         return {"success": "Form Uploaded"}
     except Exception as err:
+
         return {"error": err}
     
-    
+def update_form_auth_code(client, data):
+    collection = client.fwt_project.forms
+    print(data)
+    myquery =  {'formName': data.formName} 
+    newvalues = { "$set": { "authCode": data.authCode, "token": "" } }
+    try:
+        collection.update_one( myquery, newvalues)
+        return {"message": "Form has been succesfully updated."}
+    except Exception as err:
+        
+        return {"error": err}
+
+def update_form_auth_token(client, data):
+    collection = client.fwt_project.forms
+    myquery =  {'formName': data.formName} 
+    newvalues = { "$set": { "token": data.token } }
+    try:
+        collection.update_one( myquery, newvalues)
+        return {"message": "Form has been succesfully updated."}
+    except Exception as err:
+        return {"error": err}
+
+
+
+
+
+
 def update_saved_form(client, data):
     
     collection = client.fwt_project.forms
+    print(data)
     
     myquery =  {'formName': data.formName} 
     newvalues = { "$set": { "components": data.components } }
-       
+    print(myquery)
     try:
         collection.update_one( myquery, newvalues)
+        
         return {"message": "Form has been succesfully saved."}
     except Exception as err:
+        print(err)
         return {"error": err}
 
 

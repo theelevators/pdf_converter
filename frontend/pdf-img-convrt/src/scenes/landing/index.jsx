@@ -23,7 +23,10 @@ const Landing = () => {
 
     const handleClick = () => {
         const getRoute = async () => {
-            let query = authCode;
+          let query = authCode;
+          
+
+
           try {
             if (!query) {
               alert('The access code you entered is not valid.')
@@ -45,7 +48,15 @@ const Landing = () => {
               alert('Looks like there was an error. Please try again or contact your processing agent.')
               return
               }
-        }
+      }
+      
+        
+
+
+
+
+
+
 
         getRoute()
         // navigate('/')

@@ -22,12 +22,12 @@ const FormPage = () => {
   const { id } = useParams()
   const pageName = id
 
-
+  
   const getForm = async () => {
     
     try {
       const response = await axios.get(
-        `${BASE_URL}savedform/?name=${pageName}`
+        `${BASE_URL}form/loadform/?name=${pageName}`
       )
       return response
       

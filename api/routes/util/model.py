@@ -49,7 +49,7 @@ class SaveComponentSchema(BaseModel):
     formName: str = Field(default=None)
     authCode: str = Field(default=None)
     components: str = Field(default=None)
-
+    token: str = Field(default=None)
     class Config:
         the_schema = {
             "authCode": "POGGERS",

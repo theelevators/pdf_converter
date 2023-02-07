@@ -72,6 +72,8 @@ async def get_page(id: str):
     return get_page_path(client, id)
 
 
+
+
 @app.post('/form/verifyauthcode', tags=["forms"])
 async def verify_auth_code(authCode: AuthCodeSchema = Body(default=None)):
     if check_auth_code(client,authCode):
@@ -80,7 +82,10 @@ async def verify_auth_code(authCode: AuthCodeSchema = Body(default=None)):
         return {
             "error": "Invalid login info"
         }
-    return message
+    
+
+
+
 
 
 
@@ -90,8 +95,20 @@ async def verify_auth_code(authCode: AuthCodeSchema = Body(default=None)):
 async def save_form(form: SaveComponentSchema = Body(default=None)):
     return upload_new_form(client, form)
 
+@app.post("/user/updatecode", dependencies=[Depends(jwtBearer())], tags=["user"])
+async def update_form_code(form: SaveComponentSchema = Body(default=None)):
 
-@app.patch("/user/updateform", dependencies=[Depends(jwtBearer())], tags=["user"])
+    return update_form_auth_code(client, form)
+
+@app.post("/user/updatetoken", dependencies=[Depends(jwtBearer())], tags=["user"])
+async def update_form_token(form: SaveComponentSchema = Body(default=None)):
+
+    return update_form_auth_token(client,form)
+
+
+
+
+@app.post("/user/updateform", dependencies=[Depends(jwtBearer())], tags=["user"])
 async def update_form_component(form: SaveComponentSchema = Body(default=None)):
 
     return update_saved_form(client, form)

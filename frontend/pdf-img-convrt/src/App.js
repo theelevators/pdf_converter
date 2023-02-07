@@ -64,9 +64,9 @@ function App() {
   }
 
   useEffect(() => (
-    isTokenValid ? navigate(`/users/${userName}`) :
+    userToken ? navigate(`/users/${userName}`) :
     navigate(`/login`)
-  ), [isTokenValid])
+  ), [userToken])
 
 
 

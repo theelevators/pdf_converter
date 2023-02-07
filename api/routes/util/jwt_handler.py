@@ -12,8 +12,8 @@ JWT_ALGORITHIM = config('algorithm')
 
 
 
-USER_EXP_MINUTES = 30
-AUTH_CODE_EXP_MINUTES = 30
+USER_EXP_MINUTES = 60
+AUTH_CODE_EXP_MINUTES = 720
 
 # Returns generated tokens
 
@@ -40,6 +40,7 @@ def auth_submitter(accesCode: str):
         "formExpiry": time.time() + (AUTH_CODE_EXP_MINUTES * 60)
 
     }
+    
     token = jwt.encode(payload, AUTH_JWT_SECRET, algorithm=JWT_ALGORITHIM)
     return token_response(token)
 # Decode token for form submission access

@@ -5,8 +5,8 @@ import { findDOMNode } from "react-dom";
 
 const GeneralModal = ({
   showModal,
-  setShowModal,
-  setModalStatus,
+  onCancel,
+  onAccept,
   leftButtonTitle,
   rightButtonTitle,
   title,
@@ -20,10 +20,10 @@ const GeneralModal = ({
       {showModal &&
         createPortal(
           <ModalContent
-            onClose={() => setShowModal(false)}
+            onClose={() => onCancel(false)}
             isEditable={isEditable}
             handleModalEntry={handleModalEntry}
-            onAccept={() => setModalStatus(leftButtonTitle)}
+            onAccept={() => onAccept()}
             title={title}
             leftButtonTitle={leftButtonTitle}
             rightButtonTitle={rightButtonTitle}
