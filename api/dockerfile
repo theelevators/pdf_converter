@@ -154,9 +154,9 @@ EXPOSE 8000
 ENV PATH="${PATH}:~/.local/bin/"
 ENV MAIN_PATH=/app/routes/
 ENV ASSET_PATH=/app/assets/
-ENV ORIGINS=http://forms.theelevatorsapp.com:3000
+ENV ORIGINS=http://forms.theelevatorsapp.com:3000/
 ENV API_IP=http://forms.theelevatorsapp.com:8000/
 ENV EMAIL_HOST=smtp-mail.outlook.com
 ENV EMAIL_PORT=587
 
- CMD ["sh", "-c", "cd routes && nohup python3 -m uvicorn home:app --host 0.0.0.0 --port 8000 && cd ../db_util && nohup python3 db_listen.py"]
+ CMD ["sh", "-c", "cd routes && nohup python3 -m uvicorn user_server:app --host 0.0.0.0 --port 8000 && cd ../db_util && nohup python3 db_listen.py"]

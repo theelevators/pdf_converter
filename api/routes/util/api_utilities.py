@@ -2,8 +2,8 @@ import os
 import shutil
 import hashlib
 from dotenv import load_dotenv, find_dotenv
-from pymongo import MongoClient
-from bson.objectid import ObjectId
+
+
 
 import json
 
@@ -15,20 +15,27 @@ api_ip = os.environ.get("API_IP")
 def get_page_path(client, id):
     collection = client.fwt_project.forms
     try:
-        doc = collection.find_one({'accessCode': id})
+        doc = collection.find_one({'code': id})
         return {"route": doc['path']}
     except:
         return {"error": "Entry Not Found"}
     
 
-async def verify_new_user(client, username):
+def verify_new_user(client, username, email):
     collection = client.fwt_project.users
     try:
         doc = collection.find_one({'username': username})
         if doc:
             return False
     except Exception as err:
-        return True
+        return False
+    try:
+        doc = collection.find_one({'email': email})
+        if doc:
+            return False
+    except Exception as err:
+        return False
+    
     return True
 
 
@@ -56,7 +63,17 @@ def verify_login(client, username, password):
     except:
         return False
 
+def get_users(client):
+    collection = client.fwt_project.users
+    users =[]
+    try:
+        
+        for doc in collection.find():
+            users.append(doc['username'])
 
+    except Exception as err:
+        return err
+    return users
 
     
 def upload_new_form(client, data):
@@ -64,10 +81,10 @@ def upload_new_form(client, data):
     
     document = {
         "username": data.username,
-        "authCode": data.authCode,
-        "formName": data.formName,
+        "code": data.code,
+        "formName": data.formname,
         "components": data.components,
-        "path" : f"/submissions/{data.formName}"
+        "path" : f"/forms/{data.formname}"
     }
     try:
         collection.insert_one(document).inserted_id
@@ -78,9 +95,8 @@ def upload_new_form(client, data):
     
 def update_form_auth_code(client, data):
     collection = client.fwt_project.forms
-    print(data)
-    myquery =  {'formName': data.formName} 
-    newvalues = { "$set": { "authCode": data.authCode, "token": "" } }
+    myquery =  {'formName': data.formname} 
+    newvalues = { "$set": { "code": data.code, "token": "" } }
     try:
         collection.update_one( myquery, newvalues)
         return {"message": "Form has been succesfully updated."}
@@ -88,9 +104,10 @@ def update_form_auth_code(client, data):
         
         return {"error": err}
 
+
 def update_form_auth_token(client, data):
     collection = client.fwt_project.forms
-    myquery =  {'formName': data.formName} 
+    myquery =  {'formName': data.formname} 
     newvalues = { "$set": { "token": data.token } }
     try:
         collection.update_one( myquery, newvalues)
@@ -101,33 +118,40 @@ def update_form_auth_token(client, data):
 
 
 
-
-
 def update_saved_form(client, data):
     
     collection = client.fwt_project.forms
-    print(data)
     
-    myquery =  {'formName': data.formName} 
+    
+    myquery =  {'formName': data.formname} 
     newvalues = { "$set": { "components": data.components } }
-    print(myquery)
+    
     try:
         collection.update_one( myquery, newvalues)
         
         return {"message": "Form has been succesfully saved."}
     except Exception as err:
-        print(err)
+        
         return {"error": err}
 
 
 
 def upload_generic_form(client, data):
     collection = client.fwt_project.general_submissions
-    document = json.loads(data)
-    form_id = collection.insert_one(document).inserted_id
-    form_id = str(form_id)
-    return form_id
 
+    
+    try:
+        
+        document = json.loads(data)
+        if document:
+            
+            form_id = collection.insert_one(document).inserted_id
+            form_id = str(form_id)
+
+            return form_id
+        return {"error": "Form not found."}
+    except Exception as err:
+        return {"error": err}
 
 
 def get_saved_form(client, name):
@@ -144,7 +168,7 @@ def get_saved_form(client, name):
         return {"error": "Form Not Found"}
     
 
-async def insert_new_form_code(client, data):
+async def insert_share_code(client, data):
     collection = client.fwt_project.access_codes
     document = dict(data)
     try:
@@ -154,10 +178,10 @@ async def insert_new_form_code(client, data):
         return "ERROR"
 
         
-def check_auth_code(client, data):
+def check_share_code(client, data):
     collection = client.fwt_project.access_codes
     try:
-        record = collection.find_one({'authCode': data.authCode})
+        record = collection.find_one({'code': data.code})
         if record:
             return True
         return False
@@ -179,6 +203,8 @@ def create_file_location(main_path, files_path, files):
                 shutil.copyfileobj(file.file, f)
             file_path = os.path.join(main_path, file.filename)
             shutil.move(file_path, os.path.join(files_path, file.filename))
+            file.file.close()
+            return {"message": "Form has been submitted!"}
         except Exception as err:
             return {"message": "There was an error uploading the file(s)"}
         finally:

@@ -4,11 +4,12 @@ import CommentBox from "../../components/CommentBox";
 import LoginIcon from '@mui/icons-material/Login';
 import Header from "../../components/Header";
 import { Box} from "@mui/material";
-import axios from "axios";
+
+import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 
 
 
@@ -33,7 +34,7 @@ const Landing = () => {
               return
             }
                 const response = await axios.get(
-                  `${BASE_URL}form/?id=${query}`
+                  `form/?id=${query}`
                 );
               const message = response.data
               const route = message['route'];
@@ -45,22 +46,15 @@ const Landing = () => {
                 
             } catch (error) {
 
-              alert('Looks like there was an error. Please try again or contact your processing agent.')
+              alert('Looks like there was an error. Please try again or use different code.')
               return
               }
       }
       
-        
-
-
-
-
-
 
 
         getRoute()
-        // navigate('/')
-        // console.log(authCode);
+
     }
 
     return (

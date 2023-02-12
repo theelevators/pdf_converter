@@ -17,7 +17,7 @@ const FAQ = () => {
         <Accordion defaultExpanded sx={{backgroundColor: colors.primary[900]}}>
           <AccordionSummary  expandIcon={<ExpandMoreIcon />} >
             <Typography color={colors.greenAccent[500]} variant="h5">
-              An Important question
+              How To Use
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -32,15 +32,12 @@ const FAQ = () => {
         <Accordion defaultExpanded sx={{backgroundColor: colors.primary[900]}}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography color={colors.greenAccent[500]} variant="h5">
-              Another Question
+              How big is your Pogger?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos,
-              corporis in blanditiis, corrupti quidem, sint quia saepe
-              perspiciatis velit similique tempore voluptate vel mollitia. Ipsum
-              dolorem numquam aperiam sunt placeat.
+              Really BIG.
             </Typography>
           </AccordionDetails>
         </Accordion>

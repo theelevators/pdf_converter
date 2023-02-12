@@ -8,30 +8,65 @@ import IconButton from "@mui/material/IconButton";
 import RequirementBox from "../../components/ReqBox";
 import StandardBox from "../../components/standardBox";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import axios from "axios";
+// import axios from "axios";
+
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import NewComponentBox from "./../../components/AddComponentBox";
 import useWindowDimensions from "./../../util/utilities";
 import GeneralModal from "../../components/Modal";
-import ShareIcon from "@mui/icons-material/Share";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import axios from '../../../src/api/axios'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const FormCreate = ({ userToken }) => {
+const FormCreate = () => {
   /* General State */
   const [formName, setFormName] = useState("");
   const [components, setComponents] = useState({});
   const [authCode, setAuthCode] = useState("");
   const { height, width } = useWindowDimensions();
   const { id } = useParams();
+  const navigate = useNavigate()
   const user = id;
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { auth } = useAuth();
   
-  const [isShared, setIsShared] = useState(false);
-  
-  const [showShare, setShowShare] = useState(false);
+
+
+  useEffect(() => {
+    
+    const verifyUser = async () => {
+      try {
+        const response = await axios.get('users');
+        
+        const users = response.data.users
+        const userList = [...users]
+        
+        if (!userList.includes(user)) {
+          navigate('/login')
+        }
+
+        if (id != auth.userName) {
+          navigate(`/${auth.userName}`,  { replace: true })
+        }
+
+      }catch (err) {
+        console.error(err)
+
+    }
+    }
+
+    
+
+    verifyUser()
+
+  },[])
+
+
+
+
 
   /*General modal state */
   const [isEditable, setIsEditable] = useState(false);
@@ -63,15 +98,19 @@ const [showShareModal, setShowShareModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-/* General state handling */
-  const handleFormName = (entry) => {
-    setFormName(entry)
-  }
 
+
+
+
+
+
+
+/* General state handling */
 
   const handleError = (message) => {
     setShowLoadModal(false);
-    setShowSaveModal(false);
+    setShowShareModal(false);
+    setShowLoadModal(false);
     setIsEditable(false);
     setModalTitle(message);
     setLeftButtonTitle("Ok");
@@ -80,14 +119,11 @@ const [showShareModal, setShowShareModal] = useState(false);
   };
 
 
-
-
-
-
   /* New modal Config */
 
 
   const newForm = () => {
+    
     
     if (isLoaded) {
       
@@ -127,10 +163,6 @@ const [showShareModal, setShowShareModal] = useState(false);
   const handleOpenModal = () => {
     triggerNew();
   };
-
-
-
-
 
 
   /* General modal Config */
@@ -199,10 +231,9 @@ const [showShareModal, setShowShareModal] = useState(false);
         return
       }
     }
-    
     let formData = {
       username: user,
-      formName: formName,
+      formname: modalEntry,
       authCode: authCode,
       components: componentsToLoad,
       token: ''
@@ -210,24 +241,24 @@ const [showShareModal, setShowShareModal] = useState(false);
 
     if (!isLoaded) {
       axios
-        .post(`${BASE_URL}user/saveform/?name=${loadedForm}`, formData, {
+        .post(`saveform/?name=${loadedForm}`, formData, {
           headers: {
-            Authorization: "Bearer " + userToken,
+            Authorization: "Bearer " + auth.token,
           },
         })
-        .then((res) => console.log(res))
+        
         .then(() => handleSaveSucess("Form succesfully saved."))
         .catch((err) => handleError("Unable to save form."));
     }
 
     if (isLoaded) {
       axios
-        .post(`${BASE_URL}user/updateform/?name=${loadedForm}`, formData, {
+        .post(`${BASE_URL}updateform/?name=${loadedForm}`, formData, {
           headers: {
-            Authorization: "Bearer " + userToken,
+            Authorization: "Bearer " + auth.token,
           },
         })
-        .then((res) => console.log(res))
+        
         .then(() => handleSaveSucess("Form succesfully saved."))
         .catch((err) => handleError("Unable to save form."));
     }
@@ -271,12 +302,12 @@ const [showShareModal, setShowShareModal] = useState(false);
     
     const loadedForm = modalEntry
     
-    
+        
     
       axios.get(
-        `${BASE_URL}user/loadform/?name=${loadedForm}`, {
+        `${BASE_URL}loadform/?name=${loadedForm}`, {
           headers: {
-            Authorization: "Bearer " + userToken,
+            Authorization: "Bearer " + auth.token,
           },
         }
       ).then( res => handleSuccessLoad(res)).catch(err => handleError("Unable To Load Form."));
@@ -288,15 +319,9 @@ const [showShareModal, setShowShareModal] = useState(false);
   };
 
 
-
-
-  
-
-
   /*Handle Share Button */
 
   const handleSuccessShare = (authCode, res) => {
-    console.log(userToken)
     if (res.data.error) {
       setShowShareModal(false);
       setIsEditable(false);
@@ -319,10 +344,6 @@ const [showShareModal, setShowShareModal] = useState(false);
 }
 
 
-
-
-
-
   const handleSucessValidation = (authCode, res) => {
     
     if (res.data.error) {
@@ -334,23 +355,21 @@ const [showShareModal, setShowShareModal] = useState(false);
       setShowModal(true);
       return
     }
-    console.log('success create')
     const token = res.data.token
 
-    console.log(token)
     const componentsToLoad = JSON.stringify(components);
     let formData = {
       username: user,
-      formName: formName,
-      authCode: authCode,
+      formname: formName,
+      code: authCode,
       components: componentsToLoad,
       token: token
     };
   
       axios.post(
-        `${BASE_URL}user/updatetoken`, formData, {
+        `${BASE_URL}updatecode`, formData, {
           headers: {
-            Authorization: "Bearer " + userToken,
+            Authorization: "Bearer " + auth.token,
           },
         }).then(res => handleSuccessShare(authCode, res)).catch(err => handleError("Unable To Create Share Code."));
 
@@ -375,7 +394,11 @@ const [showShareModal, setShowShareModal] = useState(false);
       authCode: authCode,
     };
       axios.post(
-      `${BASE_URL}form/verifyauthcode`, formData).then( res => handleSucessValidation(authCode, res)).catch(err => handleError("Unable To Create Share Code."));
+      `${BASE_URL}updatecode`, formData,{
+        headers: {
+          Authorization: "Bearer " + auth.token,
+        },
+      }).then( res => handleSucessValidation(authCode, res)).catch(err => handleError("Unable To Create Share Code."));
    
 
   }
@@ -403,7 +426,7 @@ const [showShareModal, setShowShareModal] = useState(false);
   const triggerShare =  () => {
 
 
-
+    
 
 
     const authCode = modalEntry
@@ -411,7 +434,7 @@ const [showShareModal, setShowShareModal] = useState(false);
         const componentsToLoad = JSON.stringify(components);
     let formData = {
       username: user,
-      formName: formName,
+      formname: formName,
       authCode: authCode,
       components: componentsToLoad,
       token: ''
@@ -419,9 +442,9 @@ const [showShareModal, setShowShareModal] = useState(false);
     
     
       axios.post(
-        `${BASE_URL}user/updatecode`, formData,{
+        `${BASE_URL}updatecode`, formData,{
           headers: {
-            Authorization: "Bearer " + userToken,
+            Authorization: "Bearer " + auth.token,
           },
           
         }
