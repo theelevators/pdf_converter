@@ -1,4 +1,4 @@
 # pdf_converter
-Basic Google like form application.
+Basic Google forms like application.
 
 Utilizes FastAPI for the backend and React + MUI on the front end.
